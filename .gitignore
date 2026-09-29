@@ -1,5 +1,6 @@
 .venv/
 __pycache__/
-output/
 *.pyc
+output/
 .env
+.vscode/
