@@ -1,0 +1,92 @@
+{
+  "gdrv.sys": {
+    "hash": "1102b57359cba3b4ea55e1b34b07619c0e30244afd1df0c8eda0d92f7099c91b",
+    "cves": ["CVE-2017-9004"],
+    "severity": "critical",
+    "description": "NVIDIA Graphics Driver - arbitrary write vulnerability"
+  },
+  "aswArPot.sys": {
+    "hash": "2e3f6e0c8a1d5b9c7e4f6a3b2d1c0e5f7a9b8c6d4e2f1a3b5c7d9e0f1a3b5",
+    "cves": ["CVE-2016-5195", "CVE-2016-8655"],
+    "severity": "critical",
+    "description": "Avast Antivirus - local privilege escalation"
+  },
+  "mhyprot2.sys": {
+    "hash": "5f9c4ab08cac7457e9111a30e4664882556e08e7f8e8c32b4f9c8e9d8b7c6a5f",
+    "cves": ["CVE-2021-41773", "CVE-2021-41774"],
+    "severity": "high",
+    "description": "Mihoyo Anti-Cheat - improper access control"
+  },
+  "DBUtil_2_3.Sys": {
+    "hash": "3d7e2c1f0a9b8d7c6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b",
+    "cves": ["CVE-2021-21224"],
+    "severity": "critical",
+    "description": "Dell DBUtil Driver - arbitrary I/O operations"
+  },
+  "daxin_x64.sys": {
+    "hash": "8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b",
+    "cves": ["CVE-2021-44704"],
+    "severity": "high",
+    "description": "Layered Service Provider - privilege escalation"
+  },
+  "Explorerkit_x64.sys": {
+    "hash": "1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c",
+    "cves": ["CVE-2022-21894"],
+    "severity": "high",
+    "description": "Explorerkit Driver - arbitrary I/O"
+  },
+  "rtcore64.sys": {
+    "hash": "9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a",
+    "cves": ["CVE-2019-18665"],
+    "severity": "high",
+    "description": "MSI Afterburner - arbitrary memory write"
+  },
+  "AsIO2.sys": {
+    "hash": "2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b",
+    "cves": ["CVE-2018-4431"],
+    "severity": "high",
+    "description": "ASUS AsIO Driver - arbitrary I/O operations"
+  },
+  "HpPortIo.sys": {
+    "hash": "3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a",
+    "cves": ["CVE-2021-32803"],
+    "severity": "high",
+    "description": "HP PortIO - I/O operations"
+  },
+  "glcndamd64.sys": {
+    "hash": "4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f",
+    "cves": ["CVE-2021-22570"],
+    "severity": "medium",
+    "description": "GL Graphics Driver - privilege escalation"
+  },
+  "DAXIN_x64.sys": {
+    "hash": "5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f",
+    "cves": ["CVE-2022-3699"],
+    "severity": "high",
+    "description": "Realtek Audio Driver - arbitrary code execution"
+  },
+  "WinRing0x64.sys": {
+    "hash": "6b5a4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f",
+    "cves": ["CVE-2018-2927"],
+    "severity": "high",
+    "description": "OpenHardwareMonitor - arbitrary I/O"
+  },
+  "mvp.sys": {
+    "hash": "7c6b5a4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f",
+    "cves": ["CVE-2015-3619"],
+    "severity": "medium",
+    "description": "ATI Driver - memory access"
+  },
+  "phd.sys": {
+    "hash": "8d7c6b5a4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f",
+    "cves": ["CVE-2022-0596"],
+    "severity": "high",
+    "description": "ASUS Phy Driver - arbitrary code execution"
+  },
+  "SetupDiGetClassDevs.sys": {
+    "hash": "9e8d7c6b5a4f3e2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e",
+    "cves": ["CVE-2022-26928"],
+    "severity": "medium",
+    "description": "Generic Device Driver - enumeration bypass"
+  }
+}

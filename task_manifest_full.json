@@ -1,0 +1,104 @@
+{
+  "task_id": "comprehensive_dfir_sweep_001",
+  "description": "Comprehensive DFIR investigation: Windows + Linux acquisition → analysis → rule detection → BYOVD scan",
+  "modules": [
+    {
+      "name": "mft_acquire",
+      "params": {
+        "output_dir": "artifacts",
+        "raw_mft": true,
+        "csv_output": true,
+        "prefetch_dir": "$SystemRoot\\Prefetch"
+      }
+    },
+    {
+      "name": "evtx_collector",
+      "params": {
+        "log_channels": [
+          "System",
+          "Security",
+          "Application",
+          "Microsoft-Windows-PowerShell/Operational",
+          "Microsoft-Windows-Sysmon/Operational"
+        ],
+        "lookback_hours": 168,
+        "output_dir": "artifacts"
+      }
+    },
+    {
+      "name": "usn_parser",
+      "depends_on": ["mft_acquire"],
+      "params": {
+        "usn_source": "C:\\$Extend\\$UsnJrnl",
+        "output_dir": "artifacts"
+      }
+    },
+    {
+      "name": "linux_syslog_collector",
+      "params": {
+        "sources": [
+          "/var/log/syslog",
+          "/var/log/auth.log",
+          "/var/log/kern.log",
+          "/var/log/audit/audit.log",
+          "/var/log/dpkg.log"
+        ],
+        "glob_collect": false,
+        "journal": true,
+        "journal_since": "-7d",
+        "journal_units": [],
+        "out_dir": "artifacts"
+      }
+    },
+    {
+      "name": "linux_fs_timeline",
+      "params": {
+        "roots": ["/"],
+        "exclude_paths": ["/proc", "/sys", "/dev", "/run", "/snap"],
+        "recency_hours": 72,
+        "hash_files": true,
+        "hash_size_limit": 52428800,
+        "out_path": "artifacts/linux_fs_timeline.jsonl"
+      }
+    },
+    {
+      "name": "linux_proc_snapshot",
+      "params": {
+        "read_environ": false,
+        "read_maps": true,
+        "out_dir": "artifacts"
+      }
+    },
+    {
+      "name": "linux_persistence_scan",
+      "params": {
+        "user_homes": [],
+        "skip_suid_walk": false,
+        "out_path": "artifacts/linux_persistence.jsonl"
+      }
+    },
+    {
+      "name": "byovd_detector",
+      "params": {
+        "vuln_db": "rules/byovd.json",
+        "out_dir": "artifacts"
+      }
+    },
+    {
+      "name": "rule_engine",
+      "depends_on": [
+        "evtx_collector",
+        "linux_syslog_collector",
+        "linux_fs_timeline",
+        "linux_proc_snapshot",
+        "linux_persistence_scan"
+      ],
+      "params": {
+        "sigma_rules_dir": "rules/sigma",
+        "yara_rules_dir": "rules/yara",
+        "log_sources": [],
+        "retro_scan_ledger": true
+      }
+    }
+  ]
+}

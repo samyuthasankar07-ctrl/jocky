@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOCKY Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header h1 {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin: 0;
+        }
+        
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .card h2 {
+            font-size: 1.1rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin: 1rem 0;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background: #0f0f0f;
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+            color: #00d4ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #222;
+        }
+        
+        tr:hover {
+            background: #111;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-active {
+            background: #00d42040;
+            color: #00d4ff;
+        }
+        
+        .badge-critical {
+            background: #ff404040;
+            color: #ff4040;
+        }
+        
+        .badge-high {
+            background: #ff804040;
+            color: #ff8040;
+        }
+        
+        .badge-medium {
+            background: #ffcc0040;
+            color: #ffcc00;
+        }
+        
+        .badge-low {
+            background: #40ff8040;
+            color: #40ff80;
+        }
+        
+        .loading {
+            color: #888;
+            font-style: italic;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 0.5rem;
+        }
+        
+        .timestamp {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        
+        .card-full {
+            grid-column: 1 / -1;
+        }
+        
+        .mitre-tags {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        
+        .refresh-indicator {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: right;
+            margin-top: 1rem;
+        }
+        
+        @media (prefers-color-scheme: light) {
+            body {
+                background: #f5f5f5;
+                color: #333;
+            }
+            
+            header {
+                background: #fff;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .card {
+                background: #fff;
+                border: 1px solid #e0e0e0;
+            }
+            
+            th {
+                background: #f9f9f9;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            td {
+                border-bottom: 1px solid #f0f0f0;
+            }
+            
+            tr:hover {
+                background: #fafafa;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎯 JOCKY Management Dashboard</h1>
+    </header>
+    
+    <main>
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="stat-label">Active Agents</div>
+                    <div class="stat" id="stat-agents">-</div>
+                </div>
+                <div class="card">
+                    <div class="stat-label">Active Cases</div>
+                    <div class="stat" id="stat-cases">-</div>
+                </div>
+                <div class="card">
+                    <div class="stat-label">Total Artifacts</div>
+                    <div class="stat" id="stat-artifacts">-</div>
+                </div>
+                <div class="card">
+                    <div class="stat-label">Total Findings</div>
+                    <div class="stat" id="stat-findings">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Agents</h2>
+            <div class="card card-full">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Agent ID</th>
+                            <th>Platform</th>
+                            <th>Hostname</th>
+                            <th>Status</th>
+                            <th>Last Seen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agents-table">
+                        <tr><td colspan="5" class="loading">Loading agents...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Cases</h2>
+            <div class="card card-full">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Status</th>
+                            <th>Agents</th>
+                            <th>Artifacts</th>
+                            <th>Findings</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cases-table">
+                        <tr><td colspan="6" class="loading">Loading cases...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Findings</h2>
+            <div class="card card-full">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Agent</th>
+                            <th>Rule</th>
+                            <th>Level</th>
+                            <th>MITRE ATT&CK</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="findings-table">
+                        <tr><td colspan="6" class="loading">Loading findings...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="refresh-indicator">
+                Last updated: <span id="last-update">--:--:--</span>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        const API_BASE = location.origin;
+        const REFRESH_INTERVAL = 10000; // 10 seconds
+        
+        // Get auth token from localStorage (would be set after login)
+        function getAuthToken() {
+            return localStorage.getItem("jocky_token") || "demo_token";
+        }
+        
+        function formatTime(isoString) {
+            if (!isoString) return "N/A";
+            const date = new Date(isoString);
+            return date.toLocaleString();
+        }
+        
+        function timeAgo(isoString) {
+            if (!isoString) return "N/A";
+            const date = new Date(isoString);
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (days > 0) return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (minutes > 0) return `${minutes}m ago`;
+            return "just now";
+        }
+        
+        async function fetchCases() {
+            try {
+                const response = await fetch(`${API_BASE}/cases`, {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                return data.cases || [];
+            } catch (e) {
+                console.error("Error fetching cases:", e);
+                return [];
+            }
+        }
+        
+        async function fetchFindings(caseId) {
+            try {
+                const response = await fetch(`${API_BASE}/cases/${caseId}/findings`, {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const text = await response.text();
+                const findings = [];
+                for (const line of text.trim().split('\n')) {
+                    if (line) {
+                        try {
+                            findings.push(JSON.parse(line));
+                        } catch (e) {
+                            // Skip malformed lines
+                        }
+                    }
+                }
+                return findings;
+            } catch (e) {
+                console.error("Error fetching findings:", e);
+                return [];
+            }
+        }
+        
+        async function updateAgents(cases) {
+            const agents = new Set();
+            const agentDetails = {};
+            
+            for (const caseData of cases) {
+                for (const agentId of caseData.agents) {
+                    agents.add(agentId);
+                    agentDetails[agentId] = {
+                        status: "active",
+                        lastSeen: caseData.created_at,
+                        platform: "unknown",
+                        hostname: "unknown"
+                    };
+                }
+            }
+            
+            const tbody = document.getElementById("agents-table");
+            if (agents.size === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="loading">No agents</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = Array.from(agents).map(agentId => `
+                <tr>
+                    <td>${agentId}</td>
+                    <td>${agentDetails[agentId].platform}</td>
+                    <td>${agentDetails[agentId].hostname}</td>
+                    <td><span class="badge badge-active">Active</span></td>
+                    <td><span class="timestamp">${timeAgo(agentDetails[agentId].lastSeen)}</span></td>
+                </tr>
+            `).join("");
+            
+            document.getElementById("stat-agents").textContent = agents.size;
+        }
+        
+        async function updateCases() {
+            const cases = await fetchCases();
+            
+            const tbody = document.getElementById("cases-table");
+            if (cases.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No cases</td></tr>';
+                document.getElementById("stat-cases").textContent = "0";
+                document.getElementById("stat-artifacts").textContent = "0";
+                return;
+            }
+            
+            let totalArtifacts = 0;
+            let totalFindings = 0;
+            
+            tbody.innerHTML = cases.map(c => {
+                totalArtifacts += c.artifact_count;
+                totalFindings += c.anomaly_count;
+                
+                return `
+                    <tr>
+                        <td>${c.case_id}</td>
+                        <td><span class="badge badge-active">${c.status}</span></td>
+                        <td>${c.agents.length}</td>
+                        <td>${c.artifact_count}</td>
+                        <td>${c.anomaly_count}</td>
+                        <td><span class="timestamp">${formatTime(c.created_at)}</span></td>
+                    </tr>
+                `;
+            }).join("");
+            
+            document.getElementById("stat-cases").textContent = cases.length;
+            document.getElementById("stat-artifacts").textContent = totalArtifacts;
+            document.getElementById("stat-findings").textContent = totalFindings;
+            
+            await updateAgents(cases);
+        }
+        
+        async function updateFindings() {
+            const cases = await fetchCases();
+            const allFindings = [];
+            
+            for (const c of cases) {
+                const findings = await fetchFindings(c.case_id);
+                for (const f of findings) {
+                    allFindings.push({...f, case_id: c.case_id});
+                }
+            }
+            
+            const tbody = document.getElementById("findings-table");
+            if (allFindings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No findings</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = allFindings.slice(0, 50).map(f => {
+                const levelClass = {
+                    "critical": "badge-critical",
+                    "high": "badge-high",
+                    "medium": "badge-medium",
+                    "low": "badge-low"
+                }[f.level] || "badge-low";
+                
+                const mitreTags = (f.mitre_tags || []).join(", ");
+                
+                return `
+                    <tr>
+                        <td>${f.case_id}</td>
+                        <td>${f.agent}</td>
+                        <td>${f.rule}</td>
+                        <td><span class="badge ${levelClass}">${f.level}</span></td>
+                        <td><span class="mitre-tags">${mitreTags || "N/A"}</span></td>
+                        <td><span class="timestamp">${formatTime(f.timestamp)}</span></td>
+                    </tr>
+                `;
+            }).join("");
+        }
+        
+        async function refresh() {
+            await updateCases();
+            await updateFindings();
+            
+            const now = new Date();
+            document.getElementById("last-update").textContent = now.toLocaleTimeString();
+        }
+        
+        // Initial load
+        refresh();
+        
+        // Auto-refresh every 10 seconds
+        setInterval(refresh, REFRESH_INTERVAL);
+    </script>
+</body>
+</html>
